@@ -3,14 +3,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import React, { useRef, ReactNode, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChange, currentView, searchQuery, setSearchQuery }: { onOpenDashboard: () => void, onOpenLogin: () => void, isLoggedIn: boolean, onLogout: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp') => void, currentView: string, searchQuery: string, setSearchQuery: (q: string) => void }) => {
+const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChange, currentView, searchQuery, setSearchQuery, cartCount, onOpenCart }: { onOpenDashboard: () => void, onOpenLogin: () => void, isLoggedIn: boolean, onLogout: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp') => void, currentView: string, searchQuery: string, setSearchQuery: (q: string) => void, cartCount: number, onOpenCart: () => void }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <nav id="navbar" className="border-b border-gray-100 sticky top-0 bg-white z-50">
       {/* Promo Banner */}
       <div className="bg-teal text-white text-[10px] uppercase tracking-[0.2em] py-2 text-center font-medium">
-        Free Shipping on Orders Over $100 | Shop the Spring Collection
+        Karibu Roberts, We take measurements Deliver and Fit.
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top bar */}
@@ -78,9 +78,18 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
             <button id="wishlist-btn" className="text-gray-700 hover:text-mustard transition-colors cursor-pointer">
               <Heart size={20} />
             </button>
-            <button id="cart-btn" className="flex items-center space-x-1 text-xs uppercase tracking-widest font-medium hover:text-teal transition-colors cursor-pointer">
+            <button 
+              id="cart-btn" 
+              onClick={onOpenCart}
+              className="flex items-center space-x-1 text-xs uppercase tracking-widest font-medium hover:text-teal transition-colors cursor-pointer relative"
+            >
               <ShoppingBag size={20} />
-              <span className="hidden lg:inline">Cart (0)</span>
+              <span className="hidden lg:inline">Cart ({cartCount})</span>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-mustard text-brand-dark text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center lg:hidden">
+                  {cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -88,12 +97,42 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
         {/* Main Nav */}
         <div className="hidden lg:flex justify-center space-x-10 py-4">
           <button onClick={() => onViewChange('home')} className={`nav-link hover:text-teal cursor-pointer ${currentView === 'home' ? 'text-teal font-bold' : ''}`}>Home</button>
-          <button onClick={() => onViewChange('shop')} className={`nav-link hover:text-teal cursor-pointer ${currentView === 'shop' ? 'text-teal font-bold' : ''}`}>Shop All</button>
-          <a href="#" className="nav-link hover:text-teal cursor-pointer">Furniture</a>
-          <a href="#" className="nav-link hover:text-teal cursor-pointer">Outdoor</a>
-          <a href="#" className="nav-link hover:text-teal cursor-pointer">Kitchen</a>
-          <a href="#" className="nav-link hover:text-teal cursor-pointer">Decor</a>
-          <a href="#" className="nav-link text-mustard font-bold cursor-pointer">Sale</a>
+          <button 
+            onClick={() => { setSearchQuery('Curtains'); onViewChange('shop'); }} 
+            className="nav-link hover:text-teal cursor-pointer"
+          >
+            Curtains
+          </button>
+          <button 
+            onClick={() => { setSearchQuery('Flooring'); onViewChange('shop'); }} 
+            className="nav-link hover:text-teal cursor-pointer"
+          >
+            Flooring
+          </button>
+          <button 
+            onClick={() => { setSearchQuery('Wallpapers'); onViewChange('shop'); }} 
+            className="nav-link hover:text-teal cursor-pointer"
+          >
+            Wallpapers and Decor
+          </button>
+          <button 
+            onClick={() => { setSearchQuery('Soft Furnishing'); onViewChange('shop'); }} 
+            className="nav-link hover:text-teal cursor-pointer"
+          >
+            Soft Furnishing
+          </button>
+          <button 
+            onClick={() => { setSearchQuery('Artificial plants'); onViewChange('shop'); }} 
+            className="nav-link hover:text-teal cursor-pointer"
+          >
+            Artificial plants
+          </button>
+          <button 
+            onClick={() => { setSearchQuery(''); onViewChange('shop'); }} 
+            className={`nav-link hover:text-teal cursor-pointer ${currentView === 'shop' && searchQuery === '' ? 'text-teal font-bold' : ''}`}
+          >
+            Shop all
+          </button>
         </div>
       </div>
 
@@ -108,22 +147,47 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
           >
             <div className="px-4 py-6 space-y-4">
               <button 
-                onClick={() => { onViewChange('shop'); setIsMobileMenuOpen(false); }}
-                className="block w-full text-left text-sm uppercase tracking-widest font-bold text-teal"
-              >
-                Shop All
-              </button>
-              <button 
                 onClick={() => { onViewChange('home'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-medium"
               >
                 Home
               </button>
-              <a href="#" className="block text-sm uppercase tracking-widest font-medium">Furniture</a>
-              <a href="#" className="block text-sm uppercase tracking-widest font-medium">Outdoor</a>
-              <a href="#" className="block text-sm uppercase tracking-widest font-medium">Kitchen</a>
-              <a href="#" className="block text-sm uppercase tracking-widest font-medium">Decor</a>
-              <a href="#" className="block text-sm uppercase tracking-widest font-bold text-mustard">Sale</a>
+              <button 
+                onClick={() => { setSearchQuery('Curtains'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                className="block w-full text-left text-sm uppercase tracking-widest font-medium"
+              >
+                Curtains
+              </button>
+              <button 
+                onClick={() => { setSearchQuery('Flooring'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                className="block w-full text-left text-sm uppercase tracking-widest font-medium"
+              >
+                Flooring
+              </button>
+              <button 
+                onClick={() => { setSearchQuery('Wallpapers'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                className="block w-full text-left text-sm uppercase tracking-widest font-medium"
+              >
+                Wallpapers and Decor
+              </button>
+              <button 
+                onClick={() => { setSearchQuery('Soft Furnishing'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                className="block w-full text-left text-sm uppercase tracking-widest font-medium"
+              >
+                Soft Furnishing
+              </button>
+              <button 
+                onClick={() => { setSearchQuery('Artificial plants'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                className="block w-full text-left text-sm uppercase tracking-widest font-medium"
+              >
+                Artificial plants
+              </button>
+              <button 
+                onClick={() => { setSearchQuery(''); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                className="block w-full text-left text-sm uppercase tracking-widest font-bold text-teal"
+              >
+                Shop all
+              </button>
             </div>
           </motion.div>
         )}
@@ -149,11 +213,11 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
           className="bg-white/95 backdrop-blur-sm p-8 md:p-16 max-w-2xl border-l-8 border-mustard"
         >
-          <h2 className="text-4xl md:text-6xl mb-6 leading-tight text-brand-dark">The Art of Living Well</h2>
-          <p className="text-lg mb-8 font-light tracking-wide text-gray-700">Discover our curated collection of timeless furniture and modern essentials for your home.</p>
+          <h2 className="text-4xl md:text-6xl mb-6 leading-tight text-brand-dark">The Art of Home Improvement</h2>
+          <p className="text-lg mb-8 font-light tracking-wide text-gray-700">Discover our curated collection of timeless Home Improvements products and modern essentials for your home.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-teal text-white px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-teal/90 transition-all shadow-lg">Shop Furniture</button>
-            <button className="border-2 border-mustard text-brand-dark px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-mustard hover:text-white transition-all">New Arrivals</button>
+            <button className="bg-teal text-white px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-teal/90 transition-all shadow-lg">Shop Home Improvement</button>
+            <button className="border-2 border-mustard text-brand-dark px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-mustard hover:text-white transition-all">Curtains and Decor</button>
           </div>
         </motion.div>
       </div>
@@ -738,12 +802,14 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
   );
 };
 
-const ProductDetail = ({ product, onBack, isAdmin, onEdit }: { product: any, onBack: () => void, isAdmin?: boolean, onEdit?: () => void }) => {
+const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { product: any, onBack: () => void, isAdmin: boolean, onEdit: () => void, onAddToCart: (product: any, quantity: number) => void }) => {
   const [activeImage, setActiveImage] = useState(product.image);
+  const [quantity, setQuantity] = useState(1);
   const gallery = product.images && product.images.length > 0 ? product.images : [product.image];
 
   useEffect(() => {
     setActiveImage(product.image);
+    setQuantity(1);
   }, [product]);
 
   // SEO Structured Data
@@ -839,11 +905,24 @@ const ProductDetail = ({ product, onBack, isAdmin, onEdit }: { product: any, onB
             <div className="space-y-4 pt-8 border-t border-gray-100">
               <div className="flex items-center gap-4">
                 <div className="flex border border-gray-200">
-                  <button className="px-4 py-2 hover:bg-gray-50">-</button>
-                  <input type="text" value="1" readOnly className="w-12 text-center border-x border-gray-200 text-sm" />
-                  <button className="px-4 py-2 hover:bg-gray-50">+</button>
+                  <button 
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="px-4 py-2 hover:bg-gray-50"
+                  >
+                    -
+                  </button>
+                  <input type="text" value={quantity} readOnly className="w-12 text-center border-x border-gray-200 text-sm" />
+                  <button 
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="px-4 py-2 hover:bg-gray-50"
+                  >
+                    +
+                  </button>
                 </div>
-                <button className="flex-1 bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all shadow-lg cursor-pointer">
+                <button 
+                  onClick={() => onAddToCart(product, quantity)}
+                  className="flex-1 bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all shadow-lg cursor-pointer"
+                >
                   Add to Cart
                 </button>
               </div>
@@ -865,6 +944,192 @@ const ProductDetail = ({ product, onBack, isAdmin, onEdit }: { product: any, onB
   );
 };
 
+const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen: boolean, onClose: () => void, cart: any[], onRemove: (id: number) => void, onCheckout: (details: any) => void }) => {
+  const [step, setStep] = useState<'cart' | 'details'>('cart');
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    altPhone: '',
+    address: ''
+  });
+
+  const total = cart.reduce((sum, item) => {
+    const price = parseFloat(item.price.replace(/[^0-9.]/g, '')) || 0;
+    return sum + (price * item.quantity);
+  }, 0);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.address) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+    onCheckout(formData);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl"
+      >
+        <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-brand-gray">
+          <h2 className="text-xl font-serif italic">
+            {step === 'cart' ? 'Your Shopping Bag' : 'Delivery Details'}
+          </h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full transition-colors cursor-pointer">
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6">
+          {step === 'cart' ? (
+            <div className="space-y-6">
+              {cart.length === 0 ? (
+                <div className="text-center py-12">
+                  <ShoppingBag size={48} className="mx-auto text-gray-300 mb-4" />
+                  <p className="text-gray-500">Your bag is empty.</p>
+                  <button 
+                    onClick={onClose}
+                    className="mt-4 text-teal font-bold uppercase tracking-widest text-xs hover:underline"
+                  >
+                    Continue Shopping
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="space-y-4">
+                    {cart.map((item) => (
+                      <div key={item.id} className="flex gap-4 pb-4 border-b border-gray-50">
+                        <div className="w-20 h-20 bg-brand-gray shrink-0">
+                          <img 
+                            src={item.images?.[0]?.src || item.image} 
+                            alt={item.name} 
+                            className="w-full h-full object-cover mix-blend-multiply"
+                            referrerPolicy="no-referrer"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-medium text-sm">{item.name}</h4>
+                          <p className="text-xs text-gray-500 mb-2">{item.price} x {item.quantity}</p>
+                          <button 
+                            onClick={() => onRemove(item.id)}
+                            className="text-[10px] uppercase tracking-widest text-red-500 font-bold hover:underline"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-serif text-sm">
+                            KES {(parseFloat(item.price.replace(/[^0-9.]/g, '')) * item.quantity).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="pt-4 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500">Subtotal</span>
+                      <span className="font-medium">KES {total.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between text-lg font-serif border-t border-gray-100 pt-4">
+                      <span>Total</span>
+                      <span className="text-mustard">KES {total.toLocaleString()}</span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Full Name *</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Phone Number *</label>
+                  <input 
+                    required
+                    type="tel" 
+                    value={formData.phone}
+                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                    className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                    placeholder="0712 345 678"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Alternate Phone</label>
+                  <input 
+                    type="tel" 
+                    value={formData.altPhone}
+                    onChange={(e) => setFormData({...formData, altPhone: e.target.value})}
+                    className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                    placeholder="Optional"
+                  />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Delivery Address *</label>
+                  <textarea 
+                    required
+                    rows={3}
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                    placeholder="Building, Street, Area, City"
+                  />
+                </div>
+              </div>
+              <div className="bg-teal/5 p-4 border border-teal/10">
+                <p className="text-xs text-teal leading-relaxed">
+                  <strong>Note:</strong> We offer same-day pay on delivery for Nairobi orders. For orders outside Nairobi, a small shipping fee applies.
+                </p>
+              </div>
+            </form>
+          )}
+        </div>
+
+        <div className="p-6 bg-brand-gray border-t border-gray-100">
+          {step === 'cart' ? (
+            <button 
+              disabled={cart.length === 0}
+              onClick={() => setStep('details')}
+              className="w-full bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+            >
+              Proceed to Delivery Details
+            </button>
+          ) : (
+            <div className="flex gap-4">
+              <button 
+                onClick={() => setStep('cart')}
+                className="flex-1 border border-gray-300 py-4 text-xs uppercase tracking-widest font-bold hover:bg-white transition-all"
+              >
+                Back to Bag
+              </button>
+              <button 
+                onClick={handleSubmit}
+                className="flex-[2] bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all shadow-lg"
+              >
+                Place Order
+              </button>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export default function App() {
   const [view, setView] = useState<'home' | 'shop' | 'pdp'>('home');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
@@ -880,6 +1145,30 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [diagnostics, setDiagnostics] = useState<any>(null);
   const [showDiagnostics, setShowDiagnostics] = useState(false);
+  const [cart, setCart] = useState<any[]>([]);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  const addToCart = (product: any, quantity: number) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
+      }
+      return [...prev, { ...product, quantity }];
+    });
+    setIsCheckoutOpen(true);
+  };
+
+  const removeFromCart = (id: number) => {
+    setCart(prev => prev.filter(item => item.id !== id));
+  };
+
+  const handleCheckout = (details: any) => {
+    console.log("Order placed:", { details, cart });
+    alert(`Thank you, ${details.name}! Your order has been placed. Someone will call you on ${details.phone} to confirm the order.`);
+    setCart([]);
+    setIsCheckoutOpen(false);
+  };
 
   const handleViewChange = (newView: 'home' | 'shop' | 'pdp') => {
     setView(newView);
@@ -965,25 +1254,24 @@ export default function App() {
   }, []);
 
   const rooms = [
-    { title: "Living Room", image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop" },
-    { title: "Bedroom", image: "https://images.unsplash.com/photo-1505691938895-1758d7eaa511?q=80&w=800&auto=format&fit=crop" },
-    { title: "Dining Room", image: "https://images.unsplash.com/photo-1577202214328-c04b77cefb5d?q=80&w=800&auto=format&fit=crop" },
-    { title: "Pantry", image: "https://images.unsplash.com/photo-1588854337236-6889d631faa8?q=80&w=800&auto=format&fit=crop" },
-    { title: "Kitchen", image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?q=80&w=800&auto=format&fit=crop" },
-    { title: "Bathroom", image: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=800&auto=format&fit=crop" },
-    { title: "Balcony", image: "https://images.unsplash.com/photo-1594498653385-d5172c532c00?q=80&w=800&auto=format&fit=crop" },
-    { title: "Patio", image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?q=80&w=800&auto=format&fit=crop" },
-    { title: "Outdoor", image: "https://images.unsplash.com/photo-1506619216599-9d16d0903dfd?q=80&w=800&auto=format&fit=crop" },
+    { title: "Living Room", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/234.jpg" },
+    { title: "Bedroom", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/235-1.jpg" },
+    { title: "Dining Room", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/236.jpg" },
+    { title: "Pantry", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/237.jpg" },
+    { title: "Kitchen", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/238.jpg" },
+    { title: "Bathroom", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/239.jpg" },
+    { title: "Balcony", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/240-1.jpg" },
+    { title: "Outdoor", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/241.jpg" },
   ];
 
   const categories = [
     { title: "Flooring & Carpet", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/123.jpg" },
-    { title: "Window Treatments", image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop" },
-    { title: "Soft Furnishing", image: "https://images.unsplash.com/photo-1584144124475-3430182939e6?q=80&w=800&auto=format&fit=crop" },
-    { title: "Walling & Panels", image: "https://images.unsplash.com/photo-1615529182904-14819c35db37?q=80&w=800&auto=format&fit=crop" },
-    { title: "Bedding", image: "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?q=80&w=800&auto=format&fit=crop" },
-    { title: "Outdoor & Plants", image: "https://images.unsplash.com/photo-1466781783364-391e5a6df246?q=80&w=800&auto=format&fit=crop" },
-    { title: "Walkways & Door Mats", image: "https://images.unsplash.com/photo-1589834390005-5d4fb9bf3d32?q=80&w=800&auto=format&fit=crop" },
+    { title: "Window Treatments", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/321.jpg" },
+    { title: "Soft Furnishing", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/322.jpg" },
+    { title: "Walling & Panels", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/323.jpg" },
+    { title: "Bedding", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/235.jpg" },
+    { title: "Outdoor & Plants", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/331.jpg" },
+    { title: "Walkways & Door Mats", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/331.jpg" },
   ];
 
   const newArrivals = [
@@ -1024,6 +1312,8 @@ export default function App() {
         currentView={view}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
+        onOpenCart={() => setIsCheckoutOpen(true)}
       />
       
       <main className="flex-grow">
@@ -1033,6 +1323,7 @@ export default function App() {
             onBack={() => handleViewChange('shop')} 
             isAdmin={isLoggedIn}
             onEdit={() => handleEditProduct(selectedProduct)}
+            onAddToCart={addToCart}
           />
         ) : view === 'home' ? (
           <>
@@ -1353,6 +1644,14 @@ export default function App() {
         isOpen={isLoginOpen}
         onClose={() => setIsLoginOpen(false)}
         onLogin={(user) => { setIsLoggedIn(true); setUser(user); }}
+      />
+
+      <CheckoutModal 
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        cart={cart}
+        onRemove={removeFromCart}
+        onCheckout={handleCheckout}
       />
     </div>
   );
