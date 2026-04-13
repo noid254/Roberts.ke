@@ -1,4 +1,4 @@
-import { Search, User, ShoppingBag, Menu, Heart, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight, Plus, X, Upload, Image as ImageIcon, Edit2, Trash2, LogOut, Lock } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, Heart, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight, Plus, X, Upload, Image as ImageIcon, Edit2, Trash2, LogOut, Lock, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useRef, ReactNode, useState, useEffect } from 'react';
 import axios from 'axios';
@@ -929,6 +929,13 @@ const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { prod
               <button className="w-full border-2 border-brand-dark py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark hover:text-white transition-all cursor-pointer">
                 Add to Wishlist
               </button>
+              <button 
+                onClick={() => window.open(`https://wa.me/254700000000?text=Hello, I would like to order ${product.name}`, '_blank')}
+                className="w-full border-2 border-teal text-teal py-4 text-xs uppercase tracking-widest font-bold hover:bg-teal hover:text-white transition-all cursor-pointer flex items-center justify-center gap-2"
+              >
+                <MessageCircle size={16} />
+                Order via WhatsApp
+              </button>
             </div>
             
             <div className="pt-8 border-t border-gray-100">
@@ -1101,13 +1108,21 @@ const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen
 
         <div className="p-6 bg-brand-gray border-t border-gray-100">
           {step === 'cart' ? (
-            <button 
-              disabled={cart.length === 0}
-              onClick={() => setStep('details')}
-              className="w-full bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-            >
-              Proceed to Delivery Details
-            </button>
+            <div className="flex gap-4">
+              <button 
+                onClick={onClose}
+                className="flex-1 border border-gray-300 py-4 text-xs uppercase tracking-widest font-bold hover:bg-white transition-all"
+              >
+                Continue Shopping
+              </button>
+              <button 
+                disabled={cart.length === 0}
+                onClick={() => setStep('details')}
+                className="flex-[2] bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              >
+                Proceed to Checkout
+              </button>
+            </div>
           ) : (
             <div className="flex gap-4">
               <button 
@@ -1182,6 +1197,16 @@ export default function App() {
     setSelectedProduct(product);
     handleViewChange('pdp');
   };
+
+  useEffect(() => {
+    let title = "RobertsKE | Best Furniture, Curtains & Flooring in Nairobi, Kenya";
+    if (view === 'shop') {
+      title = "Shop Home Improvement & Decor | RobertsKE Kenya";
+    } else if (view === 'pdp' && selectedProduct) {
+      title = `${selectedProduct.name} | RobertsKE Kenya`;
+    }
+    document.title = title;
+  }, [view, selectedProduct]);
 
   const handleEditProduct = (product: any) => {
     setEditingItem({ ...product, type: 'product' });
@@ -1271,7 +1296,7 @@ export default function App() {
     { title: "Walling & Panels", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/323.jpg" },
     { title: "Bedding", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/235.jpg" },
     { title: "Outdoor & Plants", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/331.jpg" },
-    { title: "Walkways & Door Mats", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/331.jpg" },
+    { title: "Walkways & Door Mats", image: "https://cms.roberts.co.ke/wp-content/uploads/2026/04/332.jpg" },
   ];
 
   const newArrivals = [
