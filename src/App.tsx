@@ -1,9 +1,9 @@
 import { Search, User, ShoppingBag, Menu, Heart, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight, Plus, X, Upload, Image as ImageIcon, Edit2, Trash2, LogOut, Lock, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import React, { useRef, ReactNode, useState, useEffect } from 'react';
+import React, { useRef, ReactNode, useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChange, currentView, searchQuery, setSearchQuery, cartCount, onOpenCart }: { onOpenDashboard: () => void, onOpenLogin: () => void, isLoggedIn: boolean, onLogout: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp') => void, currentView: string, searchQuery: string, setSearchQuery: (q: string) => void, cartCount: number, onOpenCart: () => void }) => {
+const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChange, currentView, searchQuery, setSearchQuery, cartCount, onOpenCart, selectedCategory }: { onOpenDashboard: () => void, onOpenLogin: () => void, isLoggedIn: boolean, onLogout: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void, currentView: string, searchQuery: string, setSearchQuery: (q: string) => void, cartCount: number, onOpenCart: () => void, selectedCategory: string | null }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -28,7 +28,7 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
           <div className="flex-1 flex items-center justify-center lg:justify-start">
             <img 
               id="logo" 
-              src="https://cms.roberts.co.ke/wp-content/uploads/2026/04/1.png" 
+              src="https://cms.roberts.co.ke/wp-content/uploads/2026/04/Gemini_Generated_Image_59hg0y59hg0y59hg.png" 
               alt="RobertsKE Logo" 
               className="h-12 w-auto cursor-pointer object-contain" 
               onClick={() => onViewChange('home')}
@@ -43,7 +43,7 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
                 value={searchQuery}
                 onChange={(e) => {
                   setSearchQuery(e.target.value);
-                  if (currentView !== 'shop' && e.target.value.length > 0) onViewChange('shop');
+                  if (currentView !== 'shop' && e.target.value.length > 0) onViewChange('shop', null, true);
                 }}
                 placeholder="What can we help you find?" 
                 className="w-full bg-brand-gray px-4 py-2 text-sm focus:outline-none border border-transparent focus:border-teal/30 transition-all"
@@ -98,38 +98,38 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
         <div className="hidden lg:flex justify-center space-x-10 py-4">
           <button onClick={() => onViewChange('home')} className={`nav-link hover:text-teal cursor-pointer ${currentView === 'home' ? 'text-teal font-bold' : ''}`}>Home</button>
           <button 
-            onClick={() => { setSearchQuery('Curtains'); onViewChange('shop'); }} 
-            className="nav-link hover:text-teal cursor-pointer"
+            onClick={() => onViewChange('shop', 'Curtains')} 
+            className={`nav-link hover:text-teal cursor-pointer ${selectedCategory === 'Curtains' ? 'text-teal font-bold' : ''}`}
           >
             Curtains
           </button>
           <button 
-            onClick={() => { setSearchQuery('Flooring'); onViewChange('shop'); }} 
-            className="nav-link hover:text-teal cursor-pointer"
+            onClick={() => onViewChange('shop', 'Flooring')} 
+            className={`nav-link hover:text-teal cursor-pointer ${selectedCategory === 'Flooring' ? 'text-teal font-bold' : ''}`}
           >
             Flooring
           </button>
           <button 
-            onClick={() => { setSearchQuery('Wallpapers'); onViewChange('shop'); }} 
-            className="nav-link hover:text-teal cursor-pointer"
+            onClick={() => onViewChange('shop', 'Wallpapers and Decor')} 
+            className={`nav-link hover:text-teal cursor-pointer ${selectedCategory === 'Wallpapers and Decor' ? 'text-teal font-bold' : ''}`}
           >
             Wallpapers and Decor
           </button>
           <button 
-            onClick={() => { setSearchQuery('Soft Furnishing'); onViewChange('shop'); }} 
-            className="nav-link hover:text-teal cursor-pointer"
+            onClick={() => onViewChange('shop', 'Soft Furnishing')} 
+            className={`nav-link hover:text-teal cursor-pointer ${selectedCategory === 'Soft Furnishing' ? 'text-teal font-bold' : ''}`}
           >
             Soft Furnishing
           </button>
           <button 
-            onClick={() => { setSearchQuery('Artificial plants'); onViewChange('shop'); }} 
-            className="nav-link hover:text-teal cursor-pointer"
+            onClick={() => onViewChange('shop', 'Artificial plants')} 
+            className={`nav-link hover:text-teal cursor-pointer ${selectedCategory === 'Artificial plants' ? 'text-teal font-bold' : ''}`}
           >
             Artificial plants
           </button>
           <button 
-            onClick={() => { setSearchQuery(''); onViewChange('shop'); }} 
-            className={`nav-link hover:text-teal cursor-pointer ${currentView === 'shop' && searchQuery === '' ? 'text-teal font-bold' : ''}`}
+            onClick={() => onViewChange('shop', null)} 
+            className={`nav-link hover:text-teal cursor-pointer ${currentView === 'shop' && !selectedCategory && searchQuery === '' ? 'text-teal font-bold' : ''}`}
           >
             Shop all
           </button>
@@ -153,37 +153,37 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
                 Home
               </button>
               <button 
-                onClick={() => { setSearchQuery('Curtains'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                onClick={() => { onViewChange('shop', 'Curtains'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-medium"
               >
                 Curtains
               </button>
               <button 
-                onClick={() => { setSearchQuery('Flooring'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                onClick={() => { onViewChange('shop', 'Flooring'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-medium"
               >
                 Flooring
               </button>
               <button 
-                onClick={() => { setSearchQuery('Wallpapers'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                onClick={() => { onViewChange('shop', 'Wallpapers and Decor'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-medium"
               >
                 Wallpapers and Decor
               </button>
               <button 
-                onClick={() => { setSearchQuery('Soft Furnishing'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                onClick={() => { onViewChange('shop', 'Soft Furnishing'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-medium"
               >
                 Soft Furnishing
               </button>
               <button 
-                onClick={() => { setSearchQuery('Artificial plants'); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                onClick={() => { onViewChange('shop', 'Artificial plants'); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-medium"
               >
                 Artificial plants
               </button>
               <button 
-                onClick={() => { setSearchQuery(''); onViewChange('shop'); setIsMobileMenuOpen(false); }}
+                onClick={() => { onViewChange('shop', null); setIsMobileMenuOpen(false); }}
                 className="block w-full text-left text-sm uppercase tracking-widest font-bold text-teal"
               >
                 Shop all
@@ -196,7 +196,7 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
   );
 };
 
-const Hero = () => {
+const Hero = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => {
   return (
     <section id="hero" className="relative h-[70vh] overflow-hidden">
       <img 
@@ -216,8 +216,18 @@ const Hero = () => {
           <h2 className="text-4xl md:text-6xl mb-6 leading-tight text-brand-dark">The Art of Home Improvement</h2>
           <p className="text-lg mb-8 font-light tracking-wide text-gray-700">Discover our curated collection of timeless Home Improvements products and modern essentials for your home.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-teal text-white px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-teal/90 transition-all shadow-lg">Shop Home Improvement</button>
-            <button className="border-2 border-mustard text-brand-dark px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-mustard hover:text-white transition-all">Curtains and Decor</button>
+            <button 
+              onClick={() => onViewChange('shop', null)}
+              className="bg-teal text-white px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-teal/90 transition-all shadow-lg cursor-pointer"
+            >
+              Shop Home Improvement
+            </button>
+            <button 
+              onClick={() => onViewChange('shop', 'Curtains')}
+              className="border-2 border-mustard text-brand-dark px-8 py-3 text-sm uppercase tracking-widest font-medium hover:bg-mustard hover:text-white transition-all cursor-pointer"
+            >
+              Curtains and Decor
+            </button>
           </div>
         </motion.div>
       </div>
@@ -269,10 +279,11 @@ const HorizontalSlider = ({ title, items, renderItem }: { title: string, items: 
   );
 };
 
-const CategoryCard = ({ title, image }: { title: string, image: string }) => (
+const CategoryCard = ({ title, image, onClick }: { title: string, image: string, onClick?: () => void }) => (
   <motion.div 
     whileHover={{ scale: 1.02 }}
     className="group cursor-pointer"
+    onClick={onClick}
   >
     <div className="aspect-[4/5] overflow-hidden mb-4 relative">
       <img 
@@ -360,27 +371,37 @@ const ProductCard = ({
   </div>
 );
 
-const DesignServicesBanner = () => (
-  <section id="design-services" className="bg-brand-gray py-20">
+const ProductOfTheWeek = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => (
+  <section id="product-of-the-week" className="bg-brand-gray py-20">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row items-center gap-12">
         <div className="lg:w-1/2">
           <img 
-            src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1200&auto=format&fit=crop" 
-            alt="Design Services" 
+            src="https://cms.roberts.co.ke/wp-content/uploads/2026/04/414.jpg" 
+            alt="Artificial Privacy Fence" 
             className="w-full h-[500px] object-cover shadow-2xl"
             referrerPolicy="no-referrer"
           />
         </div>
         <div className="lg:w-1/2 space-y-6">
-          <span className="text-teal font-bold uppercase tracking-[0.3em] text-xs">The Design Desk</span>
-          <h2 className="text-4xl md:text-5xl font-serif leading-tight">Professional Design Services, <span className="italic text-mustard">On Us.</span></h2>
+          <span className="text-teal font-bold uppercase tracking-[0.3em] text-xs">Product of the Week</span>
+          <h2 className="text-4xl md:text-5xl font-serif leading-tight">Artificial <span className="italic text-mustard">Privacy Fence.</span></h2>
           <p className="text-lg text-gray-600 font-light leading-relaxed">
-            Whether you're refreshing a corner or redesigning your entire home, our expert designers are here to help you bring your vision to life. From 3D renderings to curated mood boards.
+            Instant greenery, zero maintenance. Our premium artificial privacy fences provide the perfect blend of aesthetic appeal and functional seclusion for your Nairobi home or office. Weather-resistant and UV-protected for lasting beauty.
           </p>
           <div className="pt-4 flex flex-col sm:flex-row gap-4">
-            <button className="bg-teal text-white px-10 py-4 text-sm uppercase tracking-widest font-bold hover:bg-teal/90 transition-all">Book a Free Consultation</button>
-            <button className="border-2 border-brand-dark px-10 py-4 text-sm uppercase tracking-widest font-bold hover:bg-brand-dark hover:text-white transition-all">Learn More</button>
+            <button 
+              onClick={() => onViewChange('shop', 'Artificial plants')}
+              className="bg-teal text-white px-10 py-4 text-sm uppercase tracking-widest font-bold hover:bg-teal/90 transition-all cursor-pointer"
+            >
+              Shop Now
+            </button>
+            <button 
+              onClick={() => window.open('https://wa.me/254700000000', '_blank')}
+              className="border-2 border-brand-dark px-10 py-4 text-sm uppercase tracking-widest font-bold hover:bg-brand-dark hover:text-white transition-all cursor-pointer"
+            >
+              Request Quote
+            </button>
           </div>
         </div>
       </div>
@@ -388,7 +409,7 @@ const DesignServicesBanner = () => (
   </section>
 );
 
-const ShopTheLook = () => (
+const ShopTheLook = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => (
   <section id="shop-the-look" className="py-20 bg-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-16">
@@ -396,7 +417,10 @@ const ShopTheLook = () => (
         <p className="text-gray-500 font-light tracking-wide">Get inspired by our curated room sets.</p>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 relative group cursor-pointer overflow-hidden">
+        <div 
+          className="lg:col-span-2 relative group cursor-pointer overflow-hidden"
+          onClick={() => onViewChange('shop', 'Furniture')}
+        >
           <img 
             src="https://images.unsplash.com/photo-1616486341353-c5833ad8f012?q=80&w=1600&auto=format&fit=crop" 
             alt="Modern Living Room Look" 
@@ -410,7 +434,10 @@ const ShopTheLook = () => (
           </div>
         </div>
         <div className="flex flex-col gap-8">
-          <div className="relative flex-1 group cursor-pointer overflow-hidden">
+          <div 
+            className="relative flex-1 group cursor-pointer overflow-hidden"
+            onClick={() => onViewChange('shop', 'Furniture')}
+          >
             <img 
               src="https://images.unsplash.com/photo-1616137422495-1e9e46e2aa77?q=80&w=800&auto=format&fit=crop" 
               alt="Dining Room Look" 
@@ -422,7 +449,10 @@ const ShopTheLook = () => (
               Dining Elegance
             </div>
           </div>
-          <div className="relative flex-1 group cursor-pointer overflow-hidden">
+          <div 
+            className="relative flex-1 group cursor-pointer overflow-hidden"
+            onClick={() => onViewChange('shop', 'Soft Furnishing')}
+          >
             <img 
               src="https://images.unsplash.com/photo-1616594111705-3f513b2e50f6?q=80&w=800&auto=format&fit=crop" 
               alt="Bedroom Look" 
@@ -440,7 +470,7 @@ const ShopTheLook = () => (
   </section>
 );
 
-const RegistryBanner = () => (
+const RegistryBanner = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => (
   <section id="registry" className="bg-teal text-white py-16">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div className="max-w-3xl mx-auto space-y-6">
@@ -449,8 +479,18 @@ const RegistryBanner = () => (
           Start your new chapter with pieces you'll love for a lifetime. From everyday essentials to heirloom furniture.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-6 pt-4">
-          <button className="bg-mustard text-brand-dark px-10 py-3 text-sm uppercase tracking-widest font-bold hover:bg-white transition-all">Create a Registry</button>
-          <button className="border border-white px-10 py-3 text-sm uppercase tracking-widest font-bold hover:bg-white hover:text-teal transition-all">Find a Registry</button>
+          <button 
+            onClick={() => onViewChange('shop')}
+            className="bg-mustard text-brand-dark px-10 py-3 text-sm uppercase tracking-widest font-bold hover:bg-white transition-all cursor-pointer"
+          >
+            Create a Registry
+          </button>
+          <button 
+            onClick={() => onViewChange('shop')}
+            className="border border-white px-10 py-3 text-sm uppercase tracking-widest font-bold hover:bg-white hover:text-teal transition-all cursor-pointer"
+          >
+            Find a Registry
+          </button>
         </div>
       </div>
     </div>
@@ -1162,6 +1202,7 @@ export default function App() {
   const [showDiagnostics, setShowDiagnostics] = useState(false);
   const [cart, setCart] = useState<any[]>([]);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const addToCart = (product: any, quantity: number) => {
     setCart(prev => {
@@ -1185,8 +1226,12 @@ export default function App() {
     setIsCheckoutOpen(false);
   };
 
-  const handleViewChange = (newView: 'home' | 'shop' | 'pdp') => {
+  const handleViewChange = (newView: 'home' | 'shop' | 'pdp', category: string | null = null, keepSearch: boolean = false) => {
     setView(newView);
+    setSelectedCategory(category);
+    if (!keepSearch) {
+      setSearchQuery('');
+    }
     if (newView !== 'pdp') {
       setSelectedProduct(null);
     }
@@ -1307,22 +1352,49 @@ export default function App() {
     { name: "Teal Linen Cushion", price: "$35.00", category: "Soft Furnishing", image: "https://images.unsplash.com/photo-1584144124475-3430182939e6?q=80&w=500&auto=format&fit=crop" },
   ];
 
-  const displayProducts = products.length > 0 ? products.map(p => ({
-    id: p.id,
-    name: p.name,
-    price: p.price_html ? p.price_html.replace(/<[^>]*>?/gm, '') : `$${p.price || '0.00'}`,
-    category: p.categories?.[0]?.name || 'Furniture',
-    image: p.images?.[0]?.src || 'https://picsum.photos/seed/furniture/500/500',
-    images: p.images?.map((img: any) => img.src) || [],
-    description: p.description?.replace(/<[^>]*>?/gm, ''),
-    isLive: true
-  })).filter(p => 
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    p.category.toLowerCase().includes(searchQuery.toLowerCase())
-  ) : (error || loading ? [] : newArrivals.filter(p => 
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    p.category.toLowerCase().includes(searchQuery.toLowerCase())
-  ));
+  const randomizedArrivals = useMemo(() => {
+    return [...newArrivals].sort(() => Math.random() - 0.5);
+  }, []);
+
+  const displayProducts = products.length > 0 ? products.map(p => {
+    const rawCategory = p.categories?.[0]?.name || 'Furniture';
+    // Map raw categories to our menu categories
+    let mappedCategory = rawCategory;
+    const lowerRaw = rawCategory.toLowerCase();
+    
+    if (lowerRaw.includes('curtain') || lowerRaw.includes('blind') || lowerRaw.includes('window')) {
+      mappedCategory = 'Curtains';
+    } else if (lowerRaw.includes('floor') || lowerRaw.includes('carpet') || lowerRaw.includes('rug')) {
+      mappedCategory = 'Flooring';
+    } else if (lowerRaw.includes('wallpaper') || lowerRaw.includes('wall') || lowerRaw.includes('decor')) {
+      mappedCategory = 'Wallpapers and Decor';
+    } else if (lowerRaw.includes('furnishing') || lowerRaw.includes('cushion') || lowerRaw.includes('throw') || lowerRaw.includes('bedding')) {
+      mappedCategory = 'Soft Furnishing';
+    } else if (lowerRaw.includes('plant') || lowerRaw.includes('artificial') || lowerRaw.includes('flower')) {
+      mappedCategory = 'Artificial plants';
+    }
+
+    return {
+      id: p.id,
+      name: p.name,
+      price: p.price_html ? p.price_html.replace(/<[^>]*>?/gm, '') : `$${p.price || '0.00'}`,
+      category: mappedCategory,
+      image: p.images?.[0]?.src || 'https://picsum.photos/seed/furniture/500/500',
+      images: p.images?.map((img: any) => img.src) || [],
+      description: p.description?.replace(/<[^>]*>?/gm, ''),
+      isLive: true
+    };
+  }).filter(p => {
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         p.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !selectedCategory || p.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  }) : (error || loading ? [] : randomizedArrivals.filter(p => {
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         p.category.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = !selectedCategory || p.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  }));
 
   const isUsingDemoData = products.length === 0 && !loading && !error;
 
@@ -1339,6 +1411,7 @@ export default function App() {
         setSearchQuery={setSearchQuery}
         cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
         onOpenCart={() => setIsCheckoutOpen(true)}
+        selectedCategory={selectedCategory}
       />
       
       <main className="flex-grow">
@@ -1352,13 +1425,22 @@ export default function App() {
           />
         ) : view === 'home' ? (
           <>
-            <Hero />
+            <Hero onViewChange={handleViewChange} />
 
             {/* Shop by Room Slider */}
             <HorizontalSlider 
               title="Shop by Room" 
               items={rooms} 
-              renderItem={(room) => <CategoryCard title={room.title} image={room.image} />} 
+              renderItem={(room) => (
+                <CategoryCard 
+                  title={room.title} 
+                  image={room.image} 
+                  onClick={() => {
+                    setSearchQuery(room.title);
+                    handleViewChange('shop', null, true);
+                  }}
+                />
+              )} 
             />
 
             {/* New Arrivals Highlights */}
@@ -1483,11 +1565,32 @@ export default function App() {
             <HorizontalSlider 
               title="Shop by Category" 
               items={categories} 
-              renderItem={(cat) => <CategoryCard title={cat.title} image={cat.image} />} 
+              renderItem={(cat) => (
+                <CategoryCard 
+                  title={cat.title} 
+                  image={cat.image} 
+                  onClick={() => {
+                    let targetCategory: string | null = null;
+                    const lowerTitle = cat.title.toLowerCase();
+                    if (lowerTitle.includes('floor')) targetCategory = 'Flooring';
+                    else if (lowerTitle.includes('window')) targetCategory = 'Curtains';
+                    else if (lowerTitle.includes('wallpaper') || lowerTitle.includes('wall')) targetCategory = 'Wallpapers and Decor';
+                    else if (lowerTitle.includes('furnishing') || lowerTitle.includes('bedding')) targetCategory = 'Soft Furnishing';
+                    else if (lowerTitle.includes('plant')) targetCategory = 'Artificial plants';
+                    
+                    if (targetCategory) {
+                      handleViewChange('shop', targetCategory);
+                    } else {
+                      setSearchQuery(cat.title);
+                      handleViewChange('shop', null, true);
+                    }
+                  }}
+                />
+              )} 
             />
 
-            {/* Design Services Banner */}
-            <DesignServicesBanner />
+            {/* Product of the Week */}
+            <ProductOfTheWeek onViewChange={handleViewChange} />
 
             {/* Featured Products */}
             <section id="featured" className="bg-white py-20">
@@ -1553,7 +1656,7 @@ export default function App() {
             )}
 
             {/* Shop the Look */}
-            <ShopTheLook />
+            <ShopTheLook onViewChange={handleViewChange} />
 
             {/* Promo Section */}
             <section id="promo" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -1568,7 +1671,7 @@ export default function App() {
                   <div className="absolute inset-0 bg-teal/40 flex flex-col justify-end p-10 text-white">
                     <h3 className="text-3xl mb-4 font-serif">Kitchen Essentials</h3>
                     <p className="mb-6 opacity-90">Upgrade your culinary space with professional-grade tools.</p>
-                    <button onClick={() => handleViewChange('shop')} className="w-fit border-b-2 border-mustard pb-1 text-xs uppercase tracking-widest font-bold hover:text-mustard transition-colors cursor-pointer">Shop Kitchen</button>
+                    <button onClick={() => handleViewChange('shop', 'Soft Furnishing')} className="w-fit border-b-2 border-mustard pb-1 text-xs uppercase tracking-widest font-bold hover:text-mustard transition-colors cursor-pointer">Shop Kitchen</button>
                   </div>
                 </div>
                 <div className="relative h-[400px] overflow-hidden group">
@@ -1581,14 +1684,14 @@ export default function App() {
                   <div className="absolute inset-0 bg-mustard/40 flex flex-col justify-end p-10 text-white">
                     <h3 className="text-3xl mb-4 font-serif">Outdoor Oasis</h3>
                     <p className="mb-6 opacity-90">Create the perfect backyard retreat for summer gatherings.</p>
-                    <button onClick={() => handleViewChange('shop')} className="w-fit border-b-2 border-teal pb-1 text-xs uppercase tracking-widest font-bold hover:text-teal transition-colors cursor-pointer">Shop Outdoor</button>
+                    <button onClick={() => handleViewChange('shop', 'Artificial plants')} className="w-fit border-b-2 border-teal pb-1 text-xs uppercase tracking-widest font-bold hover:text-teal transition-colors cursor-pointer">Shop Outdoor</button>
                   </div>
                 </div>
               </div>
             </section>
 
             {/* Registry Banner */}
-            <RegistryBanner />
+            <RegistryBanner onViewChange={handleViewChange} />
 
             {/* Newsletter / Social */}
             <section id="social" className="bg-brand-gray py-20 text-center">
