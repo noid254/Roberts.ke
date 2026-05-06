@@ -1,9 +1,9 @@
-import { Search, User, ShoppingBag, Menu, Heart, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight, Plus, X, Upload, Image as ImageIcon, Edit2, Trash2, LogOut, Lock, MessageCircle } from 'lucide-react';
+import { Search, User, ShoppingBag, Menu, Heart, Instagram, Facebook, Twitter, ChevronLeft, ChevronRight, Plus, X, Upload, Image as ImageIcon, Edit2, Trash2, LogOut, Lock, MessageCircle, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useRef, ReactNode, useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChange, currentView, searchQuery, setSearchQuery, cartCount, onOpenCart, selectedCategory }: { onOpenDashboard: () => void, onOpenLogin: () => void, isLoggedIn: boolean, onLogout: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void, currentView: string, searchQuery: string, setSearchQuery: (q: string) => void, cartCount: number, onOpenCart: () => void, selectedCategory: string | null }) => {
+const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChange, currentView, searchQuery, setSearchQuery, cartCount, onOpenCart, selectedCategory }: { onOpenDashboard: () => void, onOpenLogin: () => void, isLoggedIn: boolean, onLogout: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp' | 'careers', category?: string | null, keepSearch?: boolean) => void, currentView: string, searchQuery: string, setSearchQuery: (q: string) => void, cartCount: number, onOpenCart: () => void, selectedCategory: string | null }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -196,7 +196,7 @@ const Navbar = ({ onOpenDashboard, onOpenLogin, isLoggedIn, onLogout, onViewChan
   );
 };
 
-const Hero = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => {
+const Hero = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp' | 'careers', category?: string | null, keepSearch?: boolean) => void }) => {
   return (
     <section id="hero" className="relative h-[70vh] overflow-hidden">
       <img 
@@ -371,7 +371,7 @@ const ProductCard = ({
   </div>
 );
 
-const ProductOfTheWeek = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => (
+const ProductOfTheWeek = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp' | 'careers', category?: string | null, keepSearch?: boolean) => void }) => (
   <section id="product-of-the-week" className="bg-brand-gray py-20">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row items-center gap-12">
@@ -409,7 +409,7 @@ const ProductOfTheWeek = ({ onViewChange }: { onViewChange: (view: 'home' | 'sho
   </section>
 );
 
-const ShopTheLook = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => (
+const ShopTheLook = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp' | 'careers', category?: string | null, keepSearch?: boolean) => void }) => (
   <section id="shop-the-look" className="py-20 bg-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-16">
@@ -470,7 +470,7 @@ const ShopTheLook = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 
   </section>
 );
 
-const RegistryBanner = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp', category?: string | null, keepSearch?: boolean) => void }) => (
+const RegistryBanner = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop' | 'pdp' | 'careers', category?: string | null, keepSearch?: boolean) => void }) => (
   <section id="registry" className="bg-teal text-white py-16">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <div className="max-w-3xl mx-auto space-y-6">
@@ -497,7 +497,7 @@ const RegistryBanner = ({ onViewChange }: { onViewChange: (view: 'home' | 'shop'
   </section>
 );
 
-const Footer = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
+const Footer = ({ onOpenLogin, onViewChange }: { onOpenLogin: () => void, onViewChange: (view: 'home' | 'shop' | 'pdp' | 'careers') => void }) => {
   return (
     <footer id="footer" className="bg-brand-gray pt-16 pb-8 border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -505,7 +505,7 @@ const Footer = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
           <div>
             <h5 className="text-xs uppercase tracking-widest font-bold mb-6">Customer Service</h5>
             <ul className="space-y-3 text-sm text-gray-600">
-              <li><a href="#" className="hover:underline">Contact Us</a></li>
+              <li><button onClick={() => window.location.href="mailto:info@roberts.co.ke"} className="hover:underline cursor-pointer">Contact Us</button></li>
               <li><a href="#" className="hover:underline">Track Your Order</a></li>
               <li><a href="#" className="hover:underline">Returns & Exchanges</a></li>
               <li><a href="#" className="hover:underline">Shipping Information</a></li>
@@ -513,10 +513,17 @@ const Footer = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
             </ul>
           </div>
           <div>
-            <h5 className="text-xs uppercase tracking-widest font-bold mb-6">About RobertsKE</h5>
+            <h5 className="text-xs uppercase tracking-widest font-bold mb-6 text-teal">Join Our Team</h5>
             <ul className="space-y-3 text-sm text-gray-600">
               <li><a href="#" className="hover:underline">Our Story</a></li>
-              <li><a href="#" className="hover:underline">Careers</a></li>
+              <li>
+                <button 
+                  onClick={() => onViewChange('careers')}
+                  className="bg-teal text-white px-3 py-1 text-[10px] uppercase font-bold tracking-widest hover:bg-brand-dark transition-all rounded"
+                >
+                  Careers - WE ARE HIRING!
+                </button>
+              </li>
               <li><a href="#" className="hover:underline">Sustainability</a></li>
               <li><a href="#" className="hover:underline">Store Locations</a></li>
               <li><a href="#" className="hover:underline">Trade Program</a></li>
@@ -564,6 +571,200 @@ const Footer = ({ onOpenLogin }: { onOpenLogin: () => void }) => {
         </div>
       </div>
     </footer>
+  );
+};
+
+const CareersPage = ({ onBack }: { onBack: () => void }) => {
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    whySales: '',
+    successStory: '',
+    rejectionHandling: '',
+    quality: '',
+    experience: '',
+    comfortableField: 'yes'
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Career application submitted:", formData);
+    setSubmitted(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (submitted) {
+    return (
+      <section className="py-20 bg-white">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <div className="w-20 h-20 bg-teal/10 rounded-full flex items-center justify-center mx-auto mb-8 text-teal">
+            <Check size={32} />
+          </div>
+          <h2 className="text-4xl font-serif mb-4">Application Received</h2>
+          <p className="text-gray-600 mb-8 leading-relaxed">
+            Thank you for your interest in joining the RobertsKE sales team. Our recruitment team will review your application and get back to you shortly if your profile matches our requirements.
+          </p>
+          <button 
+            onClick={onBack}
+            className="bg-brand-dark text-white px-10 py-4 text-xs uppercase tracking-widest font-bold hover:bg-teal transition-all cursor-pointer"
+          >
+            Back to Home
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-20 bg-brand-gray">
+      <div className="max-w-4xl mx-auto px-4">
+        <div className="mb-12 text-center">
+          <h2 className="text-4xl md:text-5xl font-serif mb-4">Join Our <span className="italic text-mustard">Sales Team</span></h2>
+          <p className="text-gray-500 font-light tracking-wide max-w-2xl mx-auto">
+            At RobertsKE, we represent people, places, and purpose. We're looking for passionate individuals who love interior design and have a knack for building relationships.
+          </p>
+        </div>
+
+        <div className="bg-white p-8 md:p-12 shadow-sm">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Full Name *</label>
+                <input 
+                  required
+                  type="text" 
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="John Doe"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Phone Number *</label>
+                <input 
+                  required
+                  type="tel" 
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="0712 345 678"
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Email Address *</label>
+                <input 
+                  required
+                  type="email" 
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="email@example.com"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Why do you want to join our sales team? *</label>
+                <textarea 
+                  required
+                  rows={4}
+                  value={formData.whySales}
+                  onChange={(e) => setFormData({...formData, whySales: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="Tell us about your motivation..."
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Describe a time you successfully sold a product or service. What was your approach? *</label>
+                <textarea 
+                  required
+                  rows={4}
+                  value={formData.successStory}
+                  onChange={(e) => setFormData({...formData, successStory: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="Share your success story..."
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">How do you handle rejection from a potential customer? *</label>
+                <textarea 
+                  required
+                  rows={4}
+                  value={formData.rejectionHandling}
+                  onChange={(e) => setFormData({...formData, rejectionHandling: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="How do you bounce back?"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">What do you think is the most important quality of a great salesperson? *</label>
+                <textarea 
+                  required
+                  rows={4}
+                  value={formData.quality}
+                  onChange={(e) => setFormData({...formData, quality: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="Is it empathy, persistence, or something else?"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Tell us about your experience with interior design or furniture sales (if any).</label>
+                <textarea 
+                  rows={4}
+                  value={formData.experience}
+                  onChange={(e) => setFormData({...formData, experience: e.target.value})}
+                  className="w-full px-4 py-3 bg-brand-gray border-none focus:ring-2 focus:ring-teal/20 text-sm"
+                  placeholder="Relevant experience..."
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-500">Are you comfortable with field visits and meeting clients in their homes/offices? *</label>
+                <div className="flex gap-6 mt-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="field" 
+                      value="yes"
+                      checked={formData.comfortableField === 'yes'}
+                      onChange={(e) => setFormData({...formData, comfortableField: e.target.value})}
+                      className="text-teal focus:ring-teal"
+                    />
+                    <span className="text-sm">Yes, absolutely</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="field" 
+                      value="no"
+                      checked={formData.comfortableField === 'no'}
+                      onChange={(e) => setFormData({...formData, comfortableField: e.target.value})}
+                      className="text-teal focus:ring-teal"
+                    />
+                    <span className="text-sm">No</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-8 text-center">
+              <button 
+                type="submit"
+                className="bg-teal text-white px-20 py-5 text-sm uppercase tracking-widest font-bold hover:bg-brand-dark transition-all shadow-xl cursor-pointer"
+              >
+                Submit Application
+              </button>
+              <p className="text-[10px] text-gray-400 mt-6 uppercase tracking-widest">By submitting, you agree to our data handling policy for recruitment.</p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 };
 
@@ -842,15 +1043,66 @@ const LoginModal = ({ isOpen, onClose, onLogin }: { isOpen: boolean, onClose: ()
   );
 };
 
-const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { product: any, onBack: () => void, isAdmin: boolean, onEdit: () => void, onAddToCart: (product: any, quantity: number) => void }) => {
+const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { product: any, onBack: () => void, isAdmin: boolean, onEdit: () => void, onAddToCart: (product: any, quantity: number, measurements?: any) => void }) => {
   const [activeImage, setActiveImage] = useState(product.image);
   const [quantity, setQuantity] = useState(1);
+  const [measurements, setMeasurements] = useState<any>({
+    length: '',
+    width: '',
+    unit: 'm', // default unit for flooring
+    drop: '', // for curtains
+    calculatedArea: 0,
+    systemWidth: 0
+  });
+
   const gallery = product.images && product.images.length > 0 ? product.images : [product.image];
 
   useEffect(() => {
     setActiveImage(product.image);
     setQuantity(1);
+    setMeasurements({
+      length: '',
+      width: '',
+      unit: 'm',
+      drop: '',
+      calculatedArea: 0,
+      systemWidth: 0
+    });
   }, [product]);
+
+  const isFlooring = product.category === 'Flooring';
+  const isCurtains = product.category === 'Curtains';
+
+  const convertToMeters = (val: number, unit: string) => {
+    if (isNaN(val)) return 0;
+    switch (unit) {
+      case 'cm': return val / 100;
+      case 'ft': return val * 0.3048;
+      case 'inch': return val * 0.0254;
+      default: return val;
+    }
+  };
+
+  const updateMeasurement = (field: string, value: string) => {
+    const numVal = parseFloat(value);
+    const newMeasurements = { ...measurements, [field]: value };
+    
+    if (isFlooring) {
+      const l = field === 'length' ? numVal : parseFloat(measurements.length);
+      const w = field === 'width' ? numVal : parseFloat(measurements.width);
+      const u = field === 'unit' ? value : measurements.unit;
+      
+      const area = convertToMeters(l, u) * convertToMeters(w, u);
+      newMeasurements.calculatedArea = area.toFixed(2);
+      newMeasurements.unit = u;
+    } else if (isCurtains) {
+      if (field === 'width') {
+        newMeasurements.systemWidth = (numVal * 2).toFixed(2);
+      }
+    }
+    
+    setMeasurements(newMeasurements);
+  };
 
   // SEO Structured Data
   const jsonLd = {
@@ -941,6 +1193,85 @@ const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { prod
             <div className="prose prose-sm text-gray-600 font-light leading-relaxed">
               <p>{product.description || `Experience the perfect blend of form and function with this meticulously crafted ${product.name}. Designed to elevate your living space in Nairobi, it combines timeless aesthetics with modern durability.`}</p>
             </div>
+
+            {(isFlooring || isCurtains) && (
+              <div className="bg-brand-gray p-6 space-y-4 border border-gray-100">
+                <h4 className="text-xs uppercase tracking-widest font-bold text-teal">Custom Measurements Required</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  {isFlooring ? (
+                    <>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-500">Floor Length</label>
+                        <input 
+                          type="number" 
+                          value={measurements.length}
+                          onChange={(e) => updateMeasurement('length', e.target.value)}
+                          className="w-full bg-white border-none px-3 py-2 text-sm"
+                          placeholder="e.g. 5"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-500">Floor Width</label>
+                        <input 
+                          type="number" 
+                          value={measurements.width}
+                          onChange={(e) => updateMeasurement('width', e.target.value)}
+                          className="w-full bg-white border-none px-3 py-2 text-sm"
+                          placeholder="e.g. 4"
+                        />
+                      </div>
+                      <div className="col-span-2 space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-500">Measurement Unit</label>
+                        <select 
+                          value={measurements.unit}
+                          onChange={(e) => updateMeasurement('unit', e.target.value)}
+                          className="w-full bg-white border-none px-3 py-2 text-sm"
+                        >
+                          <option value="m">Meters (m)</option>
+                          <option value="cm">Centimeters (cm)</option>
+                          <option value="ft">Feet (ft)</option>
+                          <option value="inch">Inches (in)</option>
+                        </select>
+                      </div>
+                      {measurements.calculatedArea > 0 && (
+                        <div className="col-span-2 pt-2 border-t border-gray-200">
+                          <p className="text-sm font-medium">Estimated Area: <span className="text-teal">{measurements.calculatedArea} m²</span></p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-500">Drop (Height)</label>
+                        <input 
+                          type="number" 
+                          value={measurements.drop}
+                          onChange={(e) => updateMeasurement('drop', e.target.value)}
+                          className="w-full bg-white border-none px-3 py-2 text-sm"
+                          placeholder="e.g. 2.5m"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] uppercase font-bold text-gray-500">Window Width</label>
+                        <input 
+                          type="number" 
+                          value={measurements.width}
+                          onChange={(e) => updateMeasurement('width', e.target.value)}
+                          className="w-full bg-white border-none px-3 py-2 text-sm"
+                          placeholder="e.g. 3m"
+                        />
+                      </div>
+                      {measurements.systemWidth > 0 && (
+                        <div className="col-span-2 pt-2 border-t border-gray-200">
+                          <p className="text-sm font-medium">Auto-calculated Width (Doubled): <span className="text-teal">{measurements.systemWidth} m</span></p>
+                          <p className="text-[10px] text-gray-400 mt-1 italic">Standard fullness applied automatically.</p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
             
             <div className="space-y-4 pt-8 border-t border-gray-100">
               <div className="flex items-center gap-4">
@@ -960,7 +1291,23 @@ const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { prod
                   </button>
                 </div>
                 <button 
-                  onClick={() => onAddToCart(product, quantity)}
+                  onClick={() => {
+                    if (isFlooring || isCurtains) {
+                      if ((isFlooring && (!measurements.length || !measurements.width)) || (isCurtains && (!measurements.drop || !measurements.width))) {
+                        alert("Please provide the required measurements first.");
+                        return;
+                      }
+                      
+                      const summary = isFlooring 
+                        ? `Floor Area: ${measurements.calculatedArea} m²`
+                        : `Curtain Dimensions: ${measurements.drop}m (Drop) x ${measurements.systemWidth}m (Width)`;
+                        
+                      if (!window.confirm(`Your customized order:\n${summary}\n\nAdd this to your cart?`)) {
+                        return;
+                      }
+                    }
+                    onAddToCart(product, quantity, measurements);
+                  }}
                   className="flex-1 bg-teal text-white py-4 text-xs uppercase tracking-widest font-bold hover:bg-brand-dark transition-all shadow-lg cursor-pointer"
                 >
                   Add to Cart
@@ -991,7 +1338,7 @@ const ProductDetail = ({ product, onBack, isAdmin, onEdit, onAddToCart }: { prod
   );
 };
 
-const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen: boolean, onClose: () => void, cart: any[], onRemove: (id: number) => void, onCheckout: (details: any) => void }) => {
+const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen: boolean, onClose: () => void, cart: any[], onRemove: (cartId: number) => void, onCheckout: (details: any) => void }) => {
   const [step, setStep] = useState<'cart' | 'details'>('cart');
   const [formData, setFormData] = useState({
     name: '',
@@ -1050,7 +1397,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen
                 <>
                   <div className="space-y-4">
                     {cart.map((item) => (
-                      <div key={item.id} className="flex gap-4 pb-4 border-b border-gray-50">
+                      <div key={item.cartId} className="flex gap-4 pb-4 border-b border-gray-50">
                         <div className="w-20 h-20 bg-brand-gray shrink-0">
                           <img 
                             src={item.images?.[0]?.src || item.image} 
@@ -1061,9 +1408,26 @@ const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen
                         </div>
                         <div className="flex-1">
                           <h4 className="font-medium text-sm">{item.name}</h4>
-                          <p className="text-xs text-gray-500 mb-2">{item.price} x {item.quantity}</p>
+                          <p className="text-xs text-gray-500 mb-1">{item.price} x {item.quantity}</p>
+                          
+                          {item.measurements && (
+                            <div className="bg-brand-gray/50 p-2 rounded text-[10px] space-y-1 mb-2">
+                              {item.category === 'Flooring' ? (
+                                <>
+                                  <p className="font-bold">FLOOR AREA: <span className="text-teal">{item.measurements.length}{item.measurements.unit} x {item.measurements.width}{item.measurements.unit}</span></p>
+                                  <p>Total Area: <span className="text-teal font-bold">{item.measurements.calculatedArea} m²</span></p>
+                                </>
+                              ) : (
+                                <>
+                                  <p className="font-bold">WINDOW DIMS: <span className="text-teal">Drop {item.measurements.drop}m x Width {item.measurements.width}m</span></p>
+                                  <p>Calculated Width: <span className="text-teal font-bold">{item.measurements.systemWidth} m</span></p>
+                                </>
+                              )}
+                            </div>
+                          )}
+
                           <button 
-                            onClick={() => onRemove(item.id)}
+                            onClick={() => onRemove(item.cartId)}
                             className="text-[10px] uppercase tracking-widest text-red-500 font-bold hover:underline"
                           >
                             Remove
@@ -1186,7 +1550,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, onRemove, onCheckout }: { isOpen
 };
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'shop' | 'pdp'>('home');
+  const [view, setView] = useState<'home' | 'shop' | 'pdp' | 'careers'>('home');
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
@@ -1204,19 +1568,24 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const addToCart = (product: any, quantity: number) => {
+  const addToCart = (product: any, quantity: number, measurements?: any) => {
     setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item);
+      // For items with measurements, we treat them as unique even if same product ID
+      if (measurements) {
+        return [...prev, { ...product, quantity, measurements, cartId: Date.now() }];
       }
-      return [...prev, { ...product, quantity }];
+      
+      const existing = prev.find(item => item.id === product.id && !item.measurements);
+      if (existing) {
+        return prev.map(item => (item.id === product.id && !item.measurements) ? { ...item, quantity: item.quantity + quantity } : item);
+      }
+      return [...prev, { ...product, quantity, cartId: Date.now() }];
     });
     setIsCheckoutOpen(true);
   };
 
-  const removeFromCart = (id: number) => {
-    setCart(prev => prev.filter(item => item.id !== id));
+  const removeFromCart = (cartId: number) => {
+    setCart(prev => prev.filter(item => item.cartId !== cartId));
   };
 
   const handleCheckout = (details: any) => {
@@ -1226,7 +1595,7 @@ export default function App() {
     setIsCheckoutOpen(false);
   };
 
-  const handleViewChange = (newView: 'home' | 'shop' | 'pdp', category: string | null = null, keepSearch: boolean = false) => {
+  const handleViewChange = (newView: 'home' | 'shop' | 'pdp' | 'careers', category: string | null = null, keepSearch: boolean = false) => {
     setView(newView);
     setSelectedCategory(category);
     if (!keepSearch) {
@@ -1249,6 +1618,8 @@ export default function App() {
       title = "Shop Home Improvement & Decor | RobertsKE Kenya";
     } else if (view === 'pdp' && selectedProduct) {
       title = `${selectedProduct.name} | RobertsKE Kenya`;
+    } else if (view === 'careers') {
+      title = "Careers | Join Our Sales Team | RobertsKE Kenya";
     }
     document.title = title;
   }, [view, selectedProduct]);
@@ -1756,10 +2127,15 @@ export default function App() {
               )}
             </div>
           </section>
+        ) : view === 'careers' ? (
+          <CareersPage onBack={() => handleViewChange('home')} />
         ) : null}
       </main>
 
-      <Footer onOpenLogin={() => setIsLoginOpen(true)} />
+      <Footer 
+        onOpenLogin={() => setIsLoginOpen(true)} 
+        onViewChange={handleViewChange}
+      />
 
       <DashboardModal 
         isOpen={isDashboardOpen} 
